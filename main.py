@@ -69,10 +69,48 @@ def convert_and_save_pdf_to_image(pdf_file_path, root_save_file_name, gray_scale
     images = pdf_to_img(pdf_file_path, gray_scale=gray_scale)
     save_pages(images, root_save_file_name)
 
+
+def extract_id_numbers(entry_list, split_char='.'):
+    id_numbers = [entry.split(split_char)[0] for entry in entry_list]
+    return id_numbers
+
+
+def join_df(save_name, col1, col2, col3, header=["pract_id", "entry", "work_ids"]):
+    df = pd.DataFrame(list(zip(col1, col2, col3)))
+    df.to_csv(save_name, index=False, header=header)
+
+
+def do_extract_entry_id():
+    df = pd.read_csv("Taylor_Math_Practitioners.csv", index_col=False)
+    x = df['0'].tolist()
+    ids = extract_id_numbers(x)
+    join_df("2_Taylor_Math_Practitioners.csv", ids, x)
+
+def extract_work_ids():
+    df = pd.read_csv("2_Taylor_Math_Practitioners.csv")
+    work_ids = []
+    entries = df['entry'].tolist()
+    ids = df['pract_id'].tolist()
+    for e in entries:
+        work = re.search('(work:|Work:|works:|Works:)',e)
+        if work is None:
+            work_ids.append("")
+        else:
+            temp_id = e[work.span()[1]:].replace(".", "")
+            temp_id = temp_id.replace("/", "1")
+            temp_id = temp_id.replace("J", "1")
+            work_ids.append(temp_id)
+        # print(works.span()[1])
+        # index = works.span()[1]
+        # print(x0[index:])
+    join_df("3_Taylor_Math_Practitioners.csv", ids, entries, work_ids)
+
 # img = Image.open("rotate_test.png")
 # print(pytesseract.image_to_string(img, lang='eng'))
 
 # TMP_regex = "([0-9]+|il|Ila|1S|DZ)(\.|,| )? ([A-Z][A-Z]+|[A-Z]\.)"
 # all_text = get_all_text_from_images('-TMPimgGS.png', 141)
 # do_segment_and_save(all_text, TMP_regex, "Taylor_Math_Practitioners.csv")
+
+extract_work_ids()
 
