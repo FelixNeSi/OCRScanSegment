@@ -2,12 +2,13 @@ import pdf2image
 from PIL import Image
 import pytesseract
 import re
-from pdfImagePreprocessing import process_image_for_ocr
+from pdfImagePreprocessing import process_image_for_ocr, correct_skew
 import pandas as pd
+import cv2
 
 
-def pdf_to_img(pdf_file):
-    return pdf2image.convert_from_path(pdf_file)
+def pdf_to_img(pdf_file, dpi=300, gray_scale=False):
+    return pdf2image.convert_from_path(pdf_file, dpi=dpi, grayscale=gray_scale)
 
 
 def ocr_core(file):
@@ -34,9 +35,14 @@ def save_pages(images, root_file_name):
 def get_all_text_from_images(root_file_name, number_of_files):
     text = ''
     for i in range(number_of_files):
-        temp_file_name = str(i+1) + root_file_name
-        im = Image.open(temp_file_name)
+        temp_file_name = str(i) + root_file_name
+
+        # im = Image.open(temp_file_name)
         # im = process_image_for_ocr(temp_file_name)
+
+        image = cv2.imread(temp_file_name)
+        angle, im = correct_skew(image)
+
         text = text + " " + pytesseract.image_to_string(im, lang='eng')
     return text
 
@@ -59,25 +65,14 @@ def do_segment_and_save(text, regex_pattern, file_name):
     df.to_csv(file_name)
 
 
-def convert_and_save_pdf_to_image(pdf_file_path, root_save_file_name):
-    images = pdf_to_img(pdf_file_path)
+def convert_and_save_pdf_to_image(pdf_file_path, root_save_file_name, gray_scale=True):
+    images = pdf_to_img(pdf_file_path, gray_scale=gray_scale)
     save_pages(images, root_save_file_name)
 
+# img = Image.open("rotate_test.png")
+# print(pytesseract.image_to_string(img, lang='eng'))
 
-# all_text = get_all_text_from_images('-TMPimg.png', 141)
-#
-# myre = re.compile("([0-9]+|il|Ila|1S|DZ)(\.|,| )? ([A-Z][A-Z]+|[A-Z]\.)", re.DOTALL)
-# # print(re.findall(myre, text))
-#
-# x = [(m.start(0), m.end(0)) for m in re.finditer(myre, all_text)]
-# segmented_x = []
-# prev = 0;
-# for i in x[1:]:
-#     segmented_x.append(all_text[prev:i[0]])
-#     prev = i[0]
-# segmented_x.append(all_text[prev:])
-# # for s in segmented_x:
-# #     print('**********' + s)
-#
-# df = pd.DataFrame(segmented_x)
-# df.to_csv("test_seg2.csv")
+# TMP_regex = "([0-9]+|il|Ila|1S|DZ)(\.|,| )? ([A-Z][A-Z]+|[A-Z]\.)"
+# all_text = get_all_text_from_images('-TMPimgGS.png', 141)
+# do_segment_and_save(all_text, TMP_regex, "Taylor_Math_Practitioners.csv")
+
