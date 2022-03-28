@@ -79,7 +79,12 @@ def correct_skew(image, delta=1, limit=5):
 
     return best_angle, rotated
 
-
+# y = "1.2,3,4,5"
+# z = y.split(',')
+# x = ''.join(z[1:])
+# print(y)
+# print(z)
+# print(x)
 # image = cv2.imread("139-TMPimgGS.png")
 # angle, rotated = correct_skew(image)
 # cv2.imwrite("rotate_test.png", rotated)

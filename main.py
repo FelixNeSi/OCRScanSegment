@@ -145,13 +145,13 @@ def temp_convert_jpeg_to_grey_png():
 # sci_preserved_institution_regex = '[A-Z] [0-9]+ [a-zA-Z]+ '
 # ([A-Z][A-Z]+|[A-Z]\.)z
 
-convert_and_save_pdf_to_image("Instruments of science missing.pdf", "instruments-of-science-missing", name_offset=0)
-
-all_text = get_all_text_from_images('-instruments-of-science-missing.png', 132)
-
-print(all_text)
-with open("instruments-of-science-missing.txt", "w") as text_file:
-    text_file.write(all_text)
+# convert_and_save_pdf_to_image("REDUCED CMC masters-apprentices copy.pdf", "CMC-masters-apprentices", name_offset=0)
+#
+# all_text = get_all_text_from_images('-CMC-masters-apprentices.png', 5)
+#
+# print(all_text)
+# with open("CMC-masters-apprentices.txt", "w") as text_file:
+#     text_file.write(all_text)
 
 # with open("science_preserved_institution_text.txt", "r") as f:
 #     all_text = f.read()
