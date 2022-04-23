@@ -146,16 +146,19 @@ def temp_convert_jpeg_to_grey_png():
 # ([A-Z][A-Z]+|[A-Z]\.)z
 
 # convert_and_save_pdf_to_image("REDUCED CMC masters-apprentices copy.pdf", "CMC-masters-apprentices", name_offset=0)
-#
-# all_text = get_all_text_from_images('-CMC-masters-apprentices.png', 5)
-#
-# print(all_text)
-# with open("CMC-masters-apprentices.txt", "w") as text_file:
-#     text_file.write(all_text)
+convert_and_save_pdf_to_image("BrassAndGlassmissedpages.pdf", "BrassAndGlassmissedpages", name_offset=0)
+
+all_text = get_all_text_from_images('-BrassAndGlassmissedpages.png', 75)
+
+print(all_text)
+with open("BrassAndGlassmissedpages.txt", "w") as text_file:
+    text_file.write(all_text)
+
+
 
 # with open("science_preserved_institution_text.txt", "r") as f:
 #     all_text = f.read()
-
+#
 # do_segment_and_save(all_text, sci_preserved_institution_regex, "instruments-of-science.csv")
 
 # convert_and_save_pdf_to_image("EGRT Works II.pdf", "EGRT_works", 24)

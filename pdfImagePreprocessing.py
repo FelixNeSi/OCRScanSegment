@@ -88,3 +88,5 @@ def correct_skew(image, delta=1, limit=5):
 # image = cv2.imread("139-TMPimgGS.png")
 # angle, rotated = correct_skew(image)
 # cv2.imwrite("rotate_test.png", rotated)
+
+x = "Goldsmith"
